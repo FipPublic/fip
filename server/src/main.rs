@@ -1,7 +1,7 @@
 use clap::{Command, Arg};
 use std;
 use std::string::String;
-use configs::{CLIENT_CONFIG, SERVER_CONFIG};
+use configs::{CLIENT_CONFIG, SERVER_CONFIG, load_config, ServerConfig};
 
 
 const NAME: &str = "fip_server";
@@ -24,19 +24,25 @@ fn main() {
         .get_matches();
 
     match cmd.subcommand() {
-        Some(("install",input)) => {
+        Some(("install", input)) => {
             // todo install service to system
         }
-        Some(("run",input)) => {
-            println!("{:?}", SERVER_CONFIG.lock().unwrap());
-            println!("{:?}", CLIENT_CONFIG.lock().unwrap());
+        Some(("run", input)) => {
             if let Some(config) = input.get_one::<String>("config") {
-                // todo read configuration file and init
+                match load_config::<ServerConfig>(config) {
+                    Ok(serverConfig) => {
+                        let mut server_config = SERVER_CONFIG.lock().unwrap();
+                        server_config = server_config;
+                    }
+                    Err(e) => {
+                        panic!("Server config parse error {e}");
+                    }
+                }
             }
             // todo start run server
         }
         _ => {
-            println!("Run '{} --help' for more information on a command.", NAME);
-        },
+            panic!("Run '{} --help' for more information on a command.", NAME);
+        }
     }
 }

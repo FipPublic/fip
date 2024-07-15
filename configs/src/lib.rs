@@ -9,14 +9,14 @@ use lazy_static::lazy_static;
 const SERVER_PORT: u16 = 7800;
 
 lazy_static! {
-    pub static ref SERVER_CONFIG: Mutex<ServerSettings> = Mutex::new(ServerSettings{
+    pub static ref SERVER_CONFIG: Mutex<ServerConfig> = Mutex::new(ServerConfig{
         connection_multiple: true,
         max_multiple: 2,
         server_port: SERVER_PORT,
         tcp_port: 7801,
         kcp_port: 7802
     });
-    pub static ref CLIENT_CONFIG: Mutex<ClientSettings> = Mutex::new(ClientSettings {
+    pub static ref CLIENT_CONFIG: Mutex<ClientConfig> = Mutex::new(ClientConfig {
         server_port: SERVER_PORT
     });
 }
@@ -35,17 +35,26 @@ pub fn load_config<T>(config_path: &str) -> Result<T, ConfigError>
 mod tests {
     use super::*;
     #[test]
-    fn it_works() {
+    fn test_load_config() {
         let config_path = "test_config.toml";
-        match load_config::<ServerSettings>(config_path) {
+        match load_config::<ServerConfig>(config_path) {
             Ok(setting) => println!("Loaded configs: {:?}", setting),
             Err(e) => eprintln!("Failed to load configs: {}", e),
+        }
+    }
+
+    #[test]
+    fn test_change_global_config() {
+        let mut sc = SERVER_CONFIG.lock().unwrap();
+        sc.kcp_port = 2202;
+        if (SERVER_CONFIG.lock().unwrap().kcp_port != 2202) {
+            eprintln!("Failed to change global config: {:?}",SERVER_CONFIG.lock().unwrap())
         }
     }
 }
 
 #[derive(Debug, Deserialize)]
-pub struct ServerSettings {
+pub struct ServerConfig {
     connection_multiple: bool,      // enable connection multiple
     max_multiple: u16,              // max connection on one connect
     server_port: u16,               // client connect port
@@ -54,6 +63,6 @@ pub struct ServerSettings {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct ClientSettings {
+pub struct ClientConfig {
     server_port: u16,    // server port
 }
