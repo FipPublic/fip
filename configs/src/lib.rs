@@ -55,14 +55,14 @@ mod tests {
 
 #[derive(Debug, Deserialize)]
 pub struct ServerConfig {
-    connection_multiple: bool,      // enable connection multiple
-    max_multiple: u16,              // max connection on one connect
-    server_port: u16,               // client connect port
-    tcp_port: u16,                  // tpc listen port
-    kcp_port: u16,                  // kcp listen port
+    pub connection_multiple: bool,      // enable core multiple
+    pub max_multiple: u16,              // max core on one core
+    pub server_port: u16,               // client core port
+    pub tcp_port: u16,                  // tpc listen port
+    pub kcp_port: u16,                  // kcp listen port
 }
 
 #[derive(Debug, Deserialize)]
 pub struct ClientConfig {
-    server_port: u16,    // server port
+    pub server_port: u16,    // server port
 }

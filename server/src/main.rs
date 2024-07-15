@@ -1,7 +1,7 @@
 use clap::{Command, Arg};
 use std;
 use std::string::String;
-use configs::{CLIENT_CONFIG, SERVER_CONFIG, load_config, ServerConfig};
+use configs::{SERVER_CONFIG, load_config, ServerConfig};
 
 
 const NAME: &str = "fip_server";

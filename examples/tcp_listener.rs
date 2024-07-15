@@ -35,7 +35,7 @@ async fn main() -> std::io::Result<()> {
                 });
             }
             Err(e) => {
-                println!("Failed to accept a connection: {}", e);
+                println!("Failed to accept a core: {}", e);
             }
         }
     }
