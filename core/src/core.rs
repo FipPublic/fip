@@ -10,16 +10,14 @@ pub trait Client: Proxy {
     fn connect_server() -> Result<(), Box<dyn Error>>;
 }
 
-
 pub trait Proxy {
     fn read_buffer() -> [u8; 512];
     fn write_buffer(buffer: [u8; 512]) -> Result<(), Box<dyn Error>>;
 }
 
-// Handshake is a data struct that use in build core when client connect to server
-pub struct Handshake {
-    client_name: str,
-    remote_ip: str,
-    auth: str,
-}
 
+fn run_core() {
+    let config = configs::SERVER_CONFIG.lock().unwrap();
+    
+
+}

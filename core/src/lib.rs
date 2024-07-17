@@ -1,13 +1,11 @@
-pub mod core;
-pub mod tpc;
-pub mod kcp;
+mod core;
+mod kcp;
+mod tpc;
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
-
-    }
+    fn it_works() {}
 }

@@ -1,15 +1,15 @@
+use config::{Config, ConfigError, File};
+use lazy_static::lazy_static;
+use serde::de::DeserializeOwned;
 use serde::Deserialize;
 use std::path::Path;
-use config::{Config, File, ConfigError};
-use serde::de::DeserializeOwned;
 use std::str;
 use std::sync::Mutex;
-use lazy_static::lazy_static;
 
 const SERVER_PORT: u16 = 7800;
 
 lazy_static! {
-    pub static ref SERVER_CONFIG: Mutex<ServerConfig> = Mutex::new(ServerConfig{
+    pub static ref SERVER_CONFIG: Mutex<ServerConfig> = Mutex::new(ServerConfig {
         connection_multiple: true,
         max_multiple: 2,
         server_port: SERVER_PORT,
@@ -22,14 +22,13 @@ lazy_static! {
 }
 
 pub fn load_config<T>(config_path: &str) -> Result<T, ConfigError>
-    where
-        T: DeserializeOwned
+where
+    T: DeserializeOwned,
 {
     let builder = Config::builder().add_source(File::from(Path::new(config_path)));
     let settings = builder.build()?;
     settings.try_deserialize()
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -48,21 +47,24 @@ mod tests {
         let mut sc = SERVER_CONFIG.lock().unwrap();
         sc.kcp_port = 2202;
         if (SERVER_CONFIG.lock().unwrap().kcp_port != 2202) {
-            eprintln!("Failed to change global config: {:?}",SERVER_CONFIG.lock().unwrap())
+            eprintln!(
+                "Failed to change global config: {:?}",
+                SERVER_CONFIG.lock().unwrap()
+            )
         }
     }
 }
 
 #[derive(Debug, Deserialize)]
 pub struct ServerConfig {
-    pub connection_multiple: bool,      // enable core multiple
-    pub max_multiple: u16,              // max core on one core
-    pub server_port: u16,               // client core port
-    pub tcp_port: u16,                  // tpc listen port
-    pub kcp_port: u16,                  // kcp listen port
+    pub connection_multiple: bool, // enable core multiple
+    pub max_multiple: u16,         // max core on one core
+    pub server_port: u16,          // client core port
+    pub tcp_port: u16,             // tpc listen port
+    pub kcp_port: u16,             // kcp listen port
 }
 
 #[derive(Debug, Deserialize)]
 pub struct ClientConfig {
-    pub server_port: u16,    // server port
+    pub server_port: u16, // server port
 }

@@ -1,28 +1,20 @@
-use std::error::Error;
-use std::future::Future;
-use tokio::net::{TcpListener as Tcp, TcpStream};
-use configs::{SERVER_CONFIG};
 use crate::core::{Proxy, Server};
+use configs::SERVER_CONFIG;
+use std::error::Error;
+use tokio::net::{TcpListener as Tcp, TcpStream};
 
-struct TcpListener {
+struct TcpListener {}
 
-}
-
-pub fn init_tcp_listener() {
-
-}
+pub fn init_tcp_listener() {}
 
 impl Server for TcpListener {
-
     async fn run_and_listen() -> Result<(), Box<dyn Error>> {
-
         let server_config = SERVER_CONFIG.lock().unwrap();
         let mut listen_address = String::new();
         listen_address.push_str("0.0.0.0:");
         listen_address.push_str(server_config.tcp_port.to_string().as_str());
 
         let tcp_listener = Tcp::bind(listen_address)?;
-
     }
 }
 
