@@ -2,7 +2,13 @@
 // Created by linhf on 8/16/24.
 //
 
+#include <vector>
+
 class tcpConn {
+private:
+    int _clientFd;
+public:
+    int clientFd();
     /**
      * read tcp msg
      * @return
@@ -29,6 +35,8 @@ private:
     int port;
     int maxConn;
     int connCount;
+    std::vector<int> clientFds;
+    int listenFd;
 public:
     /**
      * set tcp server listen address
@@ -47,14 +55,14 @@ public:
     void maxConnection(int size);
     /**
      * run tcp server
-     * @return
+     * @return -1 is failed,0 is success
      */
     int run();
     /**
      * get a tcp client conn
-     * @return
+     * @return tcpConn
      */
-    tcpConn accept();
+    tcpConn* accept();
 };
 
 void tcpServer::bindAddress(char *_address) {
