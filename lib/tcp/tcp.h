@@ -4,32 +4,41 @@
 
 #include <vector>
 
-class tcpConn {
+class TcpConn {
 private:
     int _clientFd;
 public:
-    int clientFd();
+    /**
+     * constructors
+     * @param clientFd
+     */
+    explicit TcpConn(int clientFd) {
+        this->_clientFd = clientFd;
+    }
     /**
      * read tcp msg
-     * @return
+     * @return tcp msg char*
      */
-    char* readBytes();
+    char* ReadBytes();
     /**
      * write rcp msg
      * @param bytes
-     * @return
+     * @return write len
      */
-    int writeBytes(char* bytes);
+    int WriteBytes(char* bytes);
     /**
-     * close tcp conn
+     * Close tcp conn
      */
-    void close();
+    void Close();
+
 };
+
+
 
 /**
  * tcp server
  */
-class tcpServer {
+class TcpServer {
 private:
     char* address;
     int port;
@@ -39,40 +48,50 @@ private:
     int listenFd;
 public:
     /**
+     * constructors
+     */
+    TcpServer() {
+        this->address = (char *)"0.0.0.0";
+        this->port = 0;
+        this->maxConn = 10;
+        this->connCount = 0;
+        this->listenFd = -1;
+    }
+    /**
      * set tcp server listen address
      * @param _address
      */
-    void bindAddress(char *_address);
+    void BindAddress(char *_address);
     /**
      * set tcp server listen port
      * @param _port
      */
-    void bindPort(int _port);
+    void BindPort(int _port);
     /**
      *set tcp server max connect size
      * @param size
      */
-    void maxConnection(int size);
+    void MaxConnection(int size);
     /**
-     * run tcp server
+     * Run tcp server
      * @return -1 is failed,0 is success
      */
-    int run();
+    int Run();
     /**
      * get a tcp client conn
-     * @return tcpConn
+     * @return TcpConn
      */
-    tcpConn* accept();
+    TcpConn * Accept();
 };
 
-void tcpServer::bindAddress(char *_address) {
+void TcpServer::BindAddress(char *_address) {
     this->address = _address;
 }
 
-void tcpServer::bindPort(int _port) {
+void TcpServer::BindPort(int _port) {
     this->port = _port;
 }
 
-void tcpServer::maxConnection(int size) {
+void TcpServer::MaxConnection(int size) {
     this->maxConn = size;
 }

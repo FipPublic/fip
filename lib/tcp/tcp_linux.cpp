@@ -4,10 +4,11 @@
 #include <sys/socket.h>
 #include <algorithm>
 #include <netinet/in.h>
+#include <unistd.h>
 #include "tcp.h"
 
 
-int tcpServer::run() {
+int TcpServer::Run() {
 
     this->listenFd = socket(AF_INET, SOCK_STREAM, 0);
     if (listenFd == -1) {
@@ -30,22 +31,33 @@ int tcpServer::run() {
     return 0;
 }
 
-tcpConn* tcpServer::accept() {
-    tcpConn *clientConn = new tcpConn();
+TcpConn* TcpServer::Accept() {
     struct sockaddr_in clientAddr;
     socklen_t clientAddrLen = sizeof(clientAddr);
 
     int clientFd = ::accept(this->listenFd,(struct sockaddr *)&clientAddr, &clientAddrLen);
     if (clientFd == -1) {
-        return tcpConn;
+        return nullptr;
     }
 
-
-    return tcpConn();
+    return new TcpConn(clientFd);
 }
 
 
+char* TcpConn::ReadBytes() {
+    char buf[256];
+    int len;
 
+    len = read(this->_clientFd,buf,sizeof(buf)-1);
+    buf[len] = '\n';
+    return buf;
+}
 
+int TcpConn::WriteBytes(char* bytes) {
+    return 0;
+}
 
+void TcpConn::Close() {
+
+}
 
