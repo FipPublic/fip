@@ -19,13 +19,13 @@ public:
      * read tcp msg
      * @return tcp msg char*
      */
-    char* ReadBytes();
+    char* ReadBytes() const;
     /**
      * write rcp msg
      * @param bytes
      * @return write len
      */
-    int WriteBytes(char* bytes);
+    long WriteBytes(char* bytes) const;
     /**
      * Close tcp conn
      */
@@ -61,17 +61,23 @@ public:
      * set tcp server listen address
      * @param _address
      */
-    void BindAddress(char *_address);
+    void BindAddress(char *_address) {
+        this->address = _address;
+    }
     /**
      * set tcp server listen port
      * @param _port
      */
-    void BindPort(int _port);
+    void BindPort(int _port) {
+        this->port = _port;
+    }
     /**
      *set tcp server max connect size
      * @param size
      */
-    void MaxConnection(int size);
+    void MaxConnection(int size) {
+        this->maxConn = size;
+    }
     /**
      * Run tcp server
      * @return -1 is failed,0 is success
@@ -84,14 +90,4 @@ public:
     TcpConn * Accept();
 };
 
-void TcpServer::BindAddress(char *_address) {
-    this->address = _address;
-}
 
-void TcpServer::BindPort(int _port) {
-    this->port = _port;
-}
-
-void TcpServer::MaxConnection(int size) {
-    this->maxConn = size;
-}

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <cstring>
 #include "tcp.h"
 
 
@@ -43,18 +44,22 @@ TcpConn* TcpServer::Accept() {
     return new TcpConn(clientFd);
 }
 
-
-char* TcpConn::ReadBytes() {
+char* TcpConn::ReadBytes() const {
     char buf[256];
-    int len;
-
-    len = read(this->_clientFd,buf,sizeof(buf)-1);
-    buf[len] = '\n';
-    return buf;
+    long len;
+read_fd:
+    len = read(this->_clientFd, buf, sizeof(buf) - 1);
+    if (len <= 0) {
+        goto read_fd;
+    }
+    buf[len] = '\0';
+    char* result = new char[len + 1];
+    std::memcpy(result, buf, len + 1);
+    return result;
 }
 
-int TcpConn::WriteBytes(char* bytes) {
-    return 0;
+long TcpConn::WriteBytes(char* bytes) const {
+    return write(this->_clientFd,bytes, strlen(bytes));
 }
 
 void TcpConn::Close() {

@@ -11,11 +11,22 @@ int main() {
     tcpServer->BindPort(8099);
     tcpServer->MaxConnection(10);
 
-    TcpConn* conn = tcpServer->Accept();
-    while (true) {
-        std::cout<< conn->ReadBytes() <<std::endl;
+    int isRun = tcpServer->Run();
+    if (isRun == -1) {
+        printf("run tcp server failed");
+        return -1;
     }
 
+    TcpConn* conn = tcpServer->Accept();
+    while (true) {
+        char * buf = conn->ReadBytes();
+        if (buf == nullptr) {
+            continue;
+        }
+        printf("%s,%lu\n", buf, sizeof("server accept msg"));
+        long writeLen =  conn->WriteBytes("server accept msg");
+        printf("%ld\n",writeLen);
+    }
 
     return 0;
 }
