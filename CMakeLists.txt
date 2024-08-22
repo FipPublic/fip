@@ -25,4 +25,4 @@ add_executable(fip main.cpp)
 
 # tcp server example
 add_executable(example_tcp_server example/tcp_server/main.cpp)
-target_link_libraries(example_tcp_server tcp)
+target_link_libraries(example_tcp_server tcp pthread)

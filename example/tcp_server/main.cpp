@@ -3,7 +3,20 @@
 //
 
 #include <iostream>
+#include <thread>
 #include "../../lib/tcp/tcp.h"
+
+
+void handlerConn(TcpConn *conn) {
+    char * buf = conn->ReadBytes();
+    if (buf ==nullptr) {
+        conn->Close();
+        return;
+    }
+    printf("server accept msg: %s\n", buf);
+    long writeLen =  conn->WriteBytes((char*)"server accept msg");
+    printf("server write msg len: %ld\n",writeLen);
+}
 
 int main() {
     auto *tcpServer = new TcpServer();
@@ -17,16 +30,16 @@ int main() {
         return -1;
     }
 
-    TcpConn* conn = tcpServer->Accept();
+
     while (true) {
-        char * buf = conn->ReadBytes();
-        if (buf == nullptr) {
+        TcpConn* conn = tcpServer->Accept();
+        if (conn == nullptr) {
             continue;
         }
-        printf("%s,%lu\n", buf, sizeof("server accept msg"));
-        long writeLen =  conn->WriteBytes("server accept msg");
-        printf("%ld\n",writeLen);
+        std::thread handlerThread(handlerConn, conn);
+        handlerThread.detach();
     }
 
+    delete tcpServer;
     return 0;
 }
