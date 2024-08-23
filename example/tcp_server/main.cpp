@@ -16,7 +16,7 @@ void handlerConn(TcpConn *conn) {
     printf("server accept msg: %s\n", buf);
     long writeLen =  conn->WriteBytes((char*)"server accept msg");
     printf("server write msg len: %ld\n",writeLen);
-    delete conn;
+    conn->Close();
 }
 
 int main() {

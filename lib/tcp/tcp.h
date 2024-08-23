@@ -87,7 +87,7 @@ public:
      * get a tcp client conn
      * @return TcpConn
      */
-    TcpConn * Accept();
+    TcpConn * Accept() const;
 };
 
 

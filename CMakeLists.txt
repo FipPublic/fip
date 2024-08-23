@@ -12,7 +12,6 @@ function(add_platform_library LIB_NAME LIB_PATH)
     elseif(APPLE)
         FILE(GLOB PLATFORM_SOURCES ${LIB_PATH}/*_mac.cpp)
     endif()
-
     add_library(${LIB_NAME} ${PLATFORM_SOURCES})
 endfunction()
 
