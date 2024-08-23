@@ -2,69 +2,92 @@
 // Created by linhf on 8/16/24.
 //
 
-class tcpConn {
+#include <vector>
+
+class TcpConn {
+private:
+    int _clientFd;
+public:
+    /**
+     * constructors
+     * @param clientFd
+     */
+    explicit TcpConn(int clientFd) {
+        this->_clientFd = clientFd;
+    }
     /**
      * read tcp msg
-     * @return
+     * @return tcp msg char*
      */
-    char* readBytes();
+    char* ReadBytes() const;
     /**
      * write rcp msg
      * @param bytes
-     * @return
+     * @return write len
      */
-    int writeBytes(char* bytes);
+    long WriteBytes(char* bytes) const;
     /**
-     * close tcp conn
+     * Close tcp conn
      */
-    void close();
+    void Close();
+
 };
+
+
 
 /**
  * tcp server
  */
-class tcpServer {
+class TcpServer {
 private:
     char* address;
     int port;
     int maxConn;
     int connCount;
+    std::vector<int> clientFds;
+    int listenFd;
 public:
+    /**
+     * constructors
+     */
+    TcpServer() {
+        this->address = (char *)"0.0.0.0";
+        this->port = 0;
+        this->maxConn = 10;
+        this->connCount = 0;
+        this->listenFd = -1;
+    }
     /**
      * set tcp server listen address
      * @param _address
      */
-    void bindAddress(char *_address);
+    void BindAddress(char *_address) {
+        this->address = _address;
+    }
     /**
      * set tcp server listen port
      * @param _port
      */
-    void bindPort(int _port);
+    void BindPort(int _port) {
+        this->port = _port;
+    }
     /**
      *set tcp server max connect size
      * @param size
      */
-    void maxConnection(int size);
+    void MaxConnection(int size) {
+        this->maxConn = size;
+    }
     /**
-     * run tcp server
-     * @return
+     * Run tcp server
+     * @return -1 is failed,0 is success
      */
-    int run();
+    int Run();
     /**
      * get a tcp client conn
-     * @return
+     * @return TcpConn
      */
-    tcpConn accept();
+    TcpConn * Accept() const;
 };
 
-void tcpServer::bindAddress(char *_address) {
-    this->address = _address;
-}
 
-void tcpServer::bindPort(int _port) {
-    this->port = _port;
-}
-
-void tcpServer::maxConnection(int size) {
-    this->maxConn = size;
-}
