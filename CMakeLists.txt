@@ -17,6 +17,7 @@ endfunction()
 
 # 依赖库
 add_platform_library(tcp lib/tcp)
+add_platform_library(config lib/config)
 
 # 服务器入口
 add_executable(fip main.cpp)
