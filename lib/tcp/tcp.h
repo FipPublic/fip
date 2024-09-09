@@ -2,6 +2,9 @@
 // Created by linhf on 8/16/24.
 //
 
+#ifndef FIP_TCP_H
+#define FIP_TCP_H
+
 #include <vector>
 
 class TcpConn {
@@ -91,3 +94,4 @@ public:
 };
 
 
+#endif //FIP_TCP_H
